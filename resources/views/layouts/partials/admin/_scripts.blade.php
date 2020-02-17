@@ -39,9 +39,8 @@ function makeTable(list, url) {
 
     for (let i = 0; i < cols.length; i++) {
         let theader = document.createElement("th");
-        theader.innerHTML = cols[i];
-        statusCol = (cols[i] === "status")? i:null;
-        
+        if ((cols[i] === "status")) statusCol = i;
+        theader.innerHTML = cols[i].split('_').join(' ').toUpperCase();
         tr.appendChild(theader);
     }
     
@@ -61,17 +60,20 @@ function makeTable(list, url) {
 
         for (let j = 0; j < 3; j++) {
             let a = document.createElement("a");
+            
             let button = document.createElement("button");
             button.setAttribute('class', buttons[j].class)
+            
             let span = document.createElement("span");
             span.setAttribute('data-feather', buttons[j].data);
-            span.innerText = buttons[j].val;
             button.appendChild(span);
             let cell = trow.insertCell(-1);
+            
             a.setAttribute('href', '/api/' + list[i][cols[0]]);
+            let txtLink = document.createTextNode(" "+buttons[j].val);
+            button.appendChild(txtLink);
             a.appendChild(button);
             cell.appendChild(a);
-
         }
 
     }
@@ -79,6 +81,7 @@ function makeTable(list, url) {
     let el = document.getElementById("root");
     el.innerHTML = "";
     el.appendChild(table);
+    feather.replace();
     let currentUrl = document.querySelector(".add");
     currentUrl.setAttribute('url', url);
 }
@@ -108,7 +111,7 @@ function addItem(current) {
 (function () {
     'use strict'
 
-    feather.replace()
+    feather.replace();
 
     
 
@@ -135,6 +138,45 @@ function addItem(current) {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     url: '/api/changeStatus',
+                    dataType : 'json',
+                    type: 'POST',
+            
+                    data: {
+                        status: status, 
+                        user_id: user_id,
+                        _token: '{{csrf_token()}}'
+                    },
+                })
+                .then(function(data){
+                    console.log(data.success)
+                });
+            });
+        });
+    });
+
+    $('.posts').on('click', function () {
+        $.ajax({
+            url: '/api/posts',
+            type: 'GET',
+            contentType: "application/json;",
+        })
+        .then(function (responce) {
+            makeTable(responce.data, this.url);
+    
+            $("[name='switch']").bootstrapSwitch();
+    
+            $.each($("[name='switch']"), function() {
+                    $(this).bootstrapSwitch('state', $(this).prop('checked') == true ? true : false);
+            });
+
+            $("[name='switch']").on('switchChange.bootstrapSwitch', function (e) {
+                var status = $(this).prop('checked') == true ? 1 : 0; 
+                var user_id = $(this).data('id'); 
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/api/changePostStatus',
                     dataType : 'json',
                     type: 'POST',
             

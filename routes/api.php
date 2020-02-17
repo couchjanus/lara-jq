@@ -20,4 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('changeStatus', 'Admin\UserController@changeUserStatus');
 Route::resource("users", "Admin\UserController");
 
+Route::post('changePostStatus', 'Admin\PostController@changePostStatus');
+Route::resource("posts", "Admin\PostController");
+
 Route::resource("categories", "Admin\CategoryController");

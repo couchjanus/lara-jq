@@ -32,9 +32,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link posts" href="#">
               <span data-feather="bar-chart-2"></span>
-              Reports
+              Posts
             </a>
           </li>
           <li class="nav-item">
