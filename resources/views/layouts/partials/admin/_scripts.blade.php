@@ -1,4 +1,5 @@
 <script src = "{{ asset('js/app.js') }}"> </script>
+<script src="{{ asset('js/bootstrap-switch.min.js') }}"></script>
 <script>
 const buttons = [{
         class: "btn btn-info",
@@ -34,20 +35,28 @@ function makeTable(list, url) {
 
     let tr = table.insertRow(-1);
 
+    let statusCol = null;
+
     for (let i = 0; i < cols.length; i++) {
         let theader = document.createElement("th");
         theader.innerHTML = cols[i];
+        statusCol = (cols[i] === "status")? i:null;
+        
         tr.appendChild(theader);
     }
-
+    
     for (let i = 0; i < list.length; i++) {
 
         let trow = table.insertRow(-1);
 
         for (let j = 0; j < cols.length; j++) {
             let cell = trow.insertCell(-1);
-            cell.innerHTML = list[i][cols[j]];
-
+            if (j == statusCol) {
+                let ch = (list[i][cols[statusCol]] == 1)? 'checked':'';
+                cell.innerHTML = "<input data-id="+list[i][cols[0]]+" class='status' type='checkbox' name='switch' " + ch +">";
+            } else {
+                cell.innerHTML = list[i][cols[j]];
+            }
         }
 
         for (let j = 0; j < 3; j++) {
@@ -101,6 +110,8 @@ function addItem(current) {
 
     feather.replace()
 
+    
+
     $('.users').on('click', function () {
         $.ajax({
                     url: '/api/users',
@@ -109,6 +120,34 @@ function addItem(current) {
         })
         .then(function (responce) {
             makeTable(responce.data, this.url);
+    
+            $("[name='switch']").bootstrapSwitch();
+    
+            $.each($("[name='switch']"), function() {
+                    $(this).bootstrapSwitch('state', $(this).prop('checked') == true ? true : false);
+            });
+
+            $("[name='switch']").on('switchChange.bootstrapSwitch', function (e) {
+                var status = $(this).prop('checked') == true ? 1 : 0; 
+                var user_id = $(this).data('id'); 
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/api/changeStatus',
+                    dataType : 'json',
+                    type: 'POST',
+            
+                    data: {
+                        status: status, 
+                        user_id: user_id,
+                        _token: '{{csrf_token()}}'
+                    },
+                })
+                .then(function(data){
+                    console.log(data.success)
+                });
+            });
         });
     });
     

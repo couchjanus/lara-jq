@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
+use App\Enums\UserStatus;
 
 class UserController extends Controller
 {
@@ -84,5 +85,14 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    public function changeUserStatus(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->status = $request->status;
+        $user->save();
+  
+        return response()->json(['success'=>'User status change successfully.']);
     }
 }

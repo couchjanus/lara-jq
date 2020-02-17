@@ -1,20 +1,24 @@
 <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+<!-- Styles -->
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+<link href="{{ asset('css/material.min.css') }}"rel="stylesheet">
+<link href="{{ asset('css/bootstrap-switch.min.css') }}"rel="stylesheet">
 
-    <style>
-    body {
-  font-size: .875rem;
-}
 
-.feather {
-  width: 16px;
-  height: 16px;
-  vertical-align: text-bottom;
-}
+<style>
+  body {
+    font-size: .875rem;
+  }
+
+  .feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+  }
 
 /*
  * Sidebar

@@ -17,5 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('changeStatus', 'Admin\UserController@changeUserStatus');
 Route::resource("users", "Admin\UserController");
+
 Route::resource("categories", "Admin\CategoryController");

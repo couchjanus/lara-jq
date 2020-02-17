@@ -24,6 +24,7 @@
     </div>
     @include('layouts.templates._categories')
     <!-- Scripts -->
+    
     @include('layouts.partials.admin._scripts')
 </body>
 </html>
